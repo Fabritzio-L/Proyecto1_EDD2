@@ -6,7 +6,7 @@ public class Jugador
     public string Nombre { get; set; }
     public string Seleccion { get; set; }
     public string Posicion { get; set; }
-    public int PromedioMinutosJugados { get; set; }
+    public int MinutosJugados { get; set; }
     public int Goles { get; set; }
     public int Asistencias { get; set; }
     public int Tarjetas { get; set; }
@@ -21,7 +21,7 @@ public class Jugador
         Nombre = nombre;
         Seleccion = seleccion;
         Posicion = posicion;
-        PromedioMinutosJugados = minutos;
+        MinutosJugados = minutos;
         Goles = goles;
         Asistencias = asistencias;
         Tarjetas = tarjetas;
@@ -31,6 +31,6 @@ public class Jugador
 
     public void Imprimir()
     {
-        Console.WriteLine($"{Nombre}|{Seleccion}|{Posicion}| Goles: {Goles}|Asistencias: {Asistencias}|Tarjetas: {Tarjetas}| Min: {PromedioMinutosJugados}");
+        Console.WriteLine($"{Nombre}|{Seleccion}|{Posicion}| Goles: {Goles}|Asistencias: {Asistencias}|Tarjetas: {Tarjetas}| Min: {MinutosJugados}");
     }
 }

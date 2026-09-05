@@ -38,4 +38,14 @@ public class ArregloJugadores
         
         datos = nuevoArreglo; // Reemplaza el arreglo viejo con el nuevo
     }
+    //Reduce el arreglo al extraer en los heap 
+    public void ReducirCantidad()
+    {
+        if (Cantidad > 0)
+        {
+            // Limpia la referencia
+            datos[Cantidad - 1] = null; 
+            Cantidad--;
+        }
+    }
 }
