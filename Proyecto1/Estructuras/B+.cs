@@ -238,6 +238,19 @@ namespace Proyecto1_EDD2
 
             return nuevoInterno;
         }
+
+        // Devuelve la primera hoja para recorrer todos los datos rápido
+        public NodoBPlus ObtenerPrimeraHoja()
+        {
+            if (Raiz == null) return null;
+
+            NodoBPlus actual = Raiz;
+            while (!actual.EsHoja)
+            {
+                actual = actual.Hijos[0]; // Baja siempre por la izquierda
+            }
+            return actual;
+        }
     }
 
 }

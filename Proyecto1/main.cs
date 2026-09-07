@@ -44,8 +44,10 @@ namespace Proyecto1_EDD2
                         RegistrarJugador();
                         break;
                     case "2":
+                        BuscarJugador();
                         break;
                     case "3":
+                        ActualizarJugador();
                         break;
                     case "4":
                         break;
@@ -97,15 +99,115 @@ namespace Proyecto1_EDD2
 
                 // Lo guarda en el arbol
                 arbol.Insertar(nuevoJugador);
-                Console.WriteLine($"\n¡Éxito! El jugador {nuevoJugador.Nombre} fue registrado en la base de datos.");
+                Console.WriteLine($"\n¡Éxito! El jugador {nuevoJugador.Nombre} fue registrado.");
 
                 //Lo guarda en el CSV
-                string lineaCSV = $"{nuevoJugador.Nombre},{nuevoJugador.Seleccion},{nuevoJugador.Posicion},{nuevoJugador.Goles},{nuevoJugador.Asistencias},{nuevoJugador.MinutosJugados},{nuevoJugador.PartidosDisputados},{nuevoJugador.Tarjetas}";
-                File.AppendAllText("jugadores.csv", lineaCSV + Environment.NewLine);
+                GuardarCambiosCSV();
             }
             catch (FormatException)
             {
                 Console.WriteLine("\nError: Debe de ingresar números válidos para las estadísticas.");
+            }
+        }
+
+
+        static void BuscarJugador()
+        {
+            Console.Write("\nIngrese el nombre del jugador a buscar: ");
+            string nombre = Console.ReadLine().Trim();
+
+            // Usa el metodo de búsqueda del arbol
+            Jugador encontrado = arbol.Buscar(nombre);
+
+            if (encontrado != null)
+            {
+                Console.WriteLine("\n--- ESTADÍSTICAS DEL JUGADOR ---");
+                // Llama al método imprimir del jugador encontrado
+                encontrado.Imprimir(); 
+            }
+            else
+            {
+                Console.WriteLine("\nError: Jugador no encontrado.");
+            }
+        }
+
+        static void ActualizarJugador()
+        {
+            Console.Write("\nIngrese el nombre del jugador a actualizar: ");
+            string nombre = Console.ReadLine().Trim();
+
+            // Buscamos al jugador en el Árbol B+
+            Jugador encontrado = arbol.Buscar(nombre);
+
+            if (encontrado != null)
+            {
+                Console.WriteLine($"\n--- ACTUALIZANDO ESTADÍSTICAS DE {encontrado.Nombre.ToUpper()} ---");
+                Console.WriteLine("Nota: Presione Enter sin escribir nada para mantener el valor actual.");
+
+                try
+                {
+                    Console.Write($"Goles actuales ({encontrado.Goles}): ");
+                    string goles = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(goles)) 
+                        encontrado.Goles = int.Parse(goles);
+
+                    Console.Write($"Asistencias actuales ({encontrado.Asistencias}): ");
+                    string asistencias = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(asistencias)) 
+                        encontrado.Asistencias = int.Parse(asistencias);
+
+                    Console.Write($"Minutos actuales ({encontrado.MinutosJugados}): ");
+                    string minutos = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(minutos)) 
+                        encontrado.MinutosJugados = int.Parse(minutos);
+
+                    Console.Write($"Partidos disputados actuales ({encontrado.PartidosDisputados}): ");
+                    string partidos = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(partidos)) 
+                        encontrado.PartidosDisputados = int.Parse(partidos);
+
+                    Console.Write($"Tarjetas actuales ({encontrado.Tarjetas}): ");
+                    string tarjetas = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(tarjetas)) 
+                        encontrado.Tarjetas = int.Parse(tarjetas);
+
+                    GuardarCambiosCSV(); // Guarda los cambios en el archivo CSV
+
+                    Console.WriteLine("\nEstadísticas actualizadas correctamente");
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nError: Debe ingresar un número entero válido. Actualización cancelada.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("\nError: Jugador no encontrado.");
+            }
+        }
+
+
+        static void GuardarCambiosCSV()
+        {
+            // Sobrescribe el archivo con los datos actualizados
+            using (StreamWriter writer = new StreamWriter("jugadores.csv"))
+            {
+                // Escribe el encabezado
+                writer.WriteLine("Nombre,Seleccion,Posicion,Goles,Asistencias,MinutosJugados,PartidosDisputados,Tarjetas");
+
+                // Extrae la primera hoja del Árbol B+
+                NodoBPlus actual = arbol.ObtenerPrimeraHoja();
+
+                // Recorre la lista enlazada de hojas
+                while (actual != null)
+                {
+                    for (int i = 0; i < actual.CantidadClaves; i++)
+                    {
+                        Jugador j = actual.Jugadores[i];
+                        writer.WriteLine($"{j.Nombre},{j.Seleccion},{j.Posicion},{j.Goles},{j.Asistencias},{j.MinutosJugados},{j.PartidosDisputados},{j.Tarjetas}");
+                    }
+                    actual = actual.Siguiente; // Salta a la siguiente hoja
+                }
             }
         }
     }

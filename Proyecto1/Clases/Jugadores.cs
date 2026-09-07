@@ -16,21 +16,28 @@ public class Jugador
     public Jugador() { }
 
     // Constructor con datos
-    public Jugador(string nombre, string seleccion, string posicion, int minutos, int goles, int asistencias, int tarjetas, int partidos)
+    public Jugador(string nombre, string seleccion, string posicion, int goles, int asistencias, int minutos, int partidos, int tarjetas)
     {
         Nombre = nombre;
         Seleccion = seleccion;
         Posicion = posicion;
-        MinutosJugados = minutos;
         Goles = goles;
         Asistencias = asistencias;
-        Tarjetas = tarjetas;
+        MinutosJugados = minutos;
         PartidosDisputados = partidos;
+        Tarjetas = tarjetas;
     }
 
 
     public void Imprimir()
     {
-        Console.WriteLine($"{Nombre}|{Seleccion}|{Posicion}| Goles: {Goles}|Asistencias: {Asistencias}|Tarjetas: {Tarjetas}| Min: {MinutosJugados}");
+        Console.WriteLine($"Nombre: {Nombre}");
+        Console.WriteLine($"Selección: {Seleccion}");
+        Console.WriteLine($"Posición: {Posicion}");
+        Console.WriteLine($"Goles: {Goles}");
+        Console.WriteLine($"Asistencias: {Asistencias}");
+        Console.WriteLine($"Minutos Jugados: {MinutosJugados}");
+        Console.WriteLine($"Partidos Disputados: {PartidosDisputados}");
+        Console.WriteLine($"Tarjetas: {Tarjetas}");
     }
 }
