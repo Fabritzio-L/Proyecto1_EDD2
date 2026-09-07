@@ -52,8 +52,10 @@ namespace Proyecto1_EDD2
                     case "4":
                         break;
                     case "5":
+                        GenerarTop5();
                         break;
                     case "6":
+                        MostrarListadoGeneral();
                         break;
                     case "7":
                         salir = true;
@@ -186,6 +188,157 @@ namespace Proyecto1_EDD2
             }
         }
 
+
+
+        static void GenerarTop5()
+        {
+            Console.WriteLine("\n---TOP 5 DE JUGADORES---");
+            Console.WriteLine("Seleccione la estadística a evaluar:");
+            Console.WriteLine("1. Goles");
+            Console.WriteLine("2. Asistencias");
+            Console.WriteLine("3. Minutos Jugados");
+            Console.WriteLine("4. Partidos Disputados");
+            Console.WriteLine("5. Tarjetas");
+            Console.Write("\nOpción: ");
+            string opcionCat = Console.ReadLine();
+
+            Categoria categoriaSeleccionada;
+            switch (opcionCat)
+            {
+                case "1": categoriaSeleccionada = Categoria.Goles; break;
+                case "2": categoriaSeleccionada = Categoria.Asistencias; break;
+                case "3": categoriaSeleccionada = Categoria.MinutosJugados; break;
+                case "4": categoriaSeleccionada = Categoria.PartidosDisputados; break;
+                case "5": categoriaSeleccionada = Categoria.Tarjetas; break;
+                default:
+                    Console.WriteLine("Opción no válida. Se usará Goles por defecto.");
+                    categoriaSeleccionada = Categoria.Goles;
+                    break;
+            }
+
+            Console.WriteLine("\n¿Desea obtener los 5 MÁS ALTOS o los 5 MÁS BAJOS?");
+            Console.WriteLine("1. Los 5 más altos (MaxHeap)");
+            Console.WriteLine("2. Los 5 más bajos (MinHeap)");
+            Console.Write("Opción: ");
+            string tipoHeap = Console.ReadLine();
+
+            // Prepara los heaps
+            MaxHeap maxHeap = null;
+            MinHeap minHeap = null;
+
+            if (tipoHeap == "2")
+                minHeap = new MinHeap(categoriaSeleccionada, 100);
+            else
+                maxHeap = new MaxHeap(categoriaSeleccionada, 100);
+
+            // Extrae a todos los jugadores del Árbol B+
+            NodoBPlus actual = arbol.ObtenerPrimeraHoja();
+            if (actual == null)
+            {
+                Console.WriteLine("\nLa base de datos está vacía.");
+                return;
+            }
+
+            while (actual != null)
+            {
+                for (int i = 0; i < actual.CantidadClaves; i++)
+                {
+                    // Inserta en el Heap correspondiente
+                    if (tipoHeap == "2")
+                        minHeap.Insertar(actual.Jugadores[i]);
+                    else
+                        maxHeap.Insertar(actual.Jugadores[i]);
+                }
+                actual = actual.Siguiente;
+            }
+
+            // 3. Imprime el resultado
+            Console.WriteLine($"\n--- TOP 5 POR {categoriaSeleccionada.ToString().ToUpper()} ---");
+            Console.WriteLine(new string('-', 98));
+            Console.WriteLine($"     {"NOMBRE",-18} | {"SELECCIÓN",-12} | {"POSICIÓN",-13} | GLS | ASI | MIN  | TAR");
+            Console.WriteLine(new string('-', 98));
+
+            // Extrae 5 veces 
+            for (int i = 0; i < 5; i++)
+            {
+                Jugador top = null;
+                if (tipoHeap == "2" && minHeap.Cantidad > 0)
+                {
+                    top = minHeap.ExtraerMinimo();
+                }
+                else if (tipoHeap != "2" && maxHeap.Cantidad > 0)
+                {
+                    top = maxHeap.ExtraerMaximo();
+                }
+
+                // Imprime el jugador encontrado con su posición del 1 al 5
+                if (top != null)
+                {
+                    Console.Write($"{i + 1}.- ");
+                    top.Imprimir();
+                }
+            }
+            Console.WriteLine(new string('-', 98));
+        }
+        static void MostrarListadoGeneral()
+        {
+            Console.WriteLine("\n--- LISTADO GENERAL DE JUGADORES (ÁRBOL AVL) ---");
+            Console.WriteLine("Seleccione la estadística para ordenar el listado:");
+            Console.WriteLine("1. Goles");
+            Console.WriteLine("2. Asistencias");
+            Console.WriteLine("3. Minutos Jugados");
+            Console.WriteLine("4. Partidos Disputados");
+            Console.WriteLine("5. Tarjetas");
+            Console.Write("\nOpción: ");
+            string opcionCat = Console.ReadLine();
+
+            Categoria categoriaSeleccionada;
+
+            // Asigna la categoria seleccionada
+            switch (opcionCat)
+            {
+                case "1": categoriaSeleccionada = Categoria.Goles; break;
+                case "2": categoriaSeleccionada = Categoria.Asistencias; break;
+                case "3": categoriaSeleccionada = Categoria.MinutosJugados; break;
+                case "4": categoriaSeleccionada = Categoria.PartidosDisputados; break;
+                case "5": categoriaSeleccionada = Categoria.Tarjetas; break;
+                default:
+                    Console.WriteLine("Opción no válida. Se ordenará por Goles por defecto.");
+                    categoriaSeleccionada = Categoria.Goles;
+                    break;
+            }
+
+
+            //Instancia el arbol AVL pasándole la categoría
+            ArbolAVL arbolAVL = new ArbolAVL(categoriaSeleccionada);
+
+            // Extrae a todos los jugadores del Árbol B+ usando la lista doblemente enlazada
+            NodoBPlus actual = arbol.ObtenerPrimeraHoja();
+            
+            if (actual == null)
+            {
+                Console.WriteLine("\nNo hay jugadores registrados.");
+                return;
+            }
+
+            while (actual != null)
+            {
+                for (int i = 0; i < actual.CantidadClaves; i++)
+                {
+                    // Pasa cada jugador al AVL para que lo acomode
+                    arbolAVL.Insertar(actual.Jugadores[i]);
+                }
+                actual = actual.Siguiente; // Salta rápido a la siguiente hoja
+            }
+
+            // 3. Imprime el resultado usando recorrido inorden del AVL
+            Console.WriteLine($"\n--- JUGADORES ORDENADOS POR {categoriaSeleccionada.ToString().ToUpper()} ---");            Console.WriteLine("-------------------------------------------------------------");
+            Console.WriteLine("--------------------------------------");
+            Console.WriteLine($" {"NOMBRE",-18} | {"SELECCIÓN",-12} | {"POSICIÓN",-13} | {"GLS",-2} | {"ASI",-2} | {"MIN",-4} | {"TAR",-2}");
+            Console.WriteLine("--------------------------------------");
+            arbolAVL.MostrarOrdenado();
+            
+        }
 
         static void GuardarCambiosCSV()
         {

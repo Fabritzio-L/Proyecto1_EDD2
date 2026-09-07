@@ -31,13 +31,7 @@ public class Jugador
 
     public void Imprimir()
     {
-        Console.WriteLine($"Nombre: {Nombre}");
-        Console.WriteLine($"Selección: {Seleccion}");
-        Console.WriteLine($"Posición: {Posicion}");
-        Console.WriteLine($"Goles: {Goles}");
-        Console.WriteLine($"Asistencias: {Asistencias}");
-        Console.WriteLine($"Minutos Jugados: {MinutosJugados}");
-        Console.WriteLine($"Partidos Disputados: {PartidosDisputados}");
-        Console.WriteLine($"Tarjetas: {Tarjetas}");
+        Console.WriteLine($" {Nombre,-18} | {Seleccion,-12} | {Posicion,-13} | Gls: {Goles,-2} | Asi: {Asistencias,-2} | Min: {MinutosJugados,-4} | Tar: {Tarjetas,-2}");
+        
     }
 }
