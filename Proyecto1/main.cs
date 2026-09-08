@@ -113,7 +113,7 @@ namespace Proyecto1_EDD2
             }
         }
 
-
+        
         static void BuscarJugador()
         {
             Console.Write("\nIngrese el nombre del jugador a buscar: ");
