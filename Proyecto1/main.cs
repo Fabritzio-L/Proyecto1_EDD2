@@ -102,7 +102,7 @@ namespace Proyecto1_EDD2
 
                 // Lo guarda en el arbol
                 arbol.Insertar(nuevoJugador);
-                Console.WriteLine($"\n¡Éxito! El jugador {nuevoJugador.Nombre} fue registrado.");
+                Console.WriteLine($"\nEl jugador {nuevoJugador.Nombre} fue registrado.");
 
                 //Lo guarda en el CSV
                 GuardarCambiosCSV();
@@ -313,7 +313,7 @@ namespace Proyecto1_EDD2
         }
         static void MostrarListadoGeneral()
         {
-            Console.WriteLine("\n--- LISTADO GENERAL DE JUGADORES (ÁRBOL AVL) ---");
+            Console.WriteLine("\n--- LISTADO GENERAL DE JUGADORES---");
             Console.WriteLine("Seleccione la estadística para ordenar el listado:");
             Console.WriteLine("1. Goles");
             Console.WriteLine("2. Asistencias");
