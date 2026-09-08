@@ -251,6 +251,51 @@ namespace Proyecto1_EDD2
             }
             return actual;
         }
+
+
+        // Metodo de eliminacion
+        public bool Eliminar(string nombreBuscado)
+        {
+            if (Raiz == null || Raiz.CantidadClaves == 0) return false;
+
+            NodoBPlus actual = Raiz;
+
+            // Navega hasta la hoja donde debería estar el jugador
+            while (!actual.EsHoja)
+            {
+                int i = 0;
+                while (i < actual.CantidadClaves && string.Compare(nombreBuscado, actual.Claves[i], StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    i++;
+                }
+                actual = actual.Hijos[i];
+            }
+
+            // Busca al jugador dentro de la hoja
+            for (int i = 0; i < actual.CantidadClaves; i++)
+            {
+                if (actual.Claves[i].Equals(nombreBuscado, StringComparison.OrdinalIgnoreCase))
+                {
+                    //Lo encuentra
+                    // Sobrescribe desplazando todo un espacio a la izquierda
+                    for (int j = i; j < actual.CantidadClaves - 1; j++)
+                    {
+                        actual.Claves[j] = actual.Claves[j + 1];
+                        actual.Jugadores[j] = actual.Jugadores[j + 1];
+                    }
+
+                    // Limpia el último espacio que quedó duplicado al recorrer
+                    actual.Claves[actual.CantidadClaves - 1] = null;
+                    actual.Jugadores[actual.CantidadClaves - 1] = null;
+                    
+                    // Reduce la cantidad de elementos de la hoja
+                    actual.CantidadClaves--;
+                    return true; // Eliminación exitosa
+                }
+            }
+
+            return false; // El jugador no existe
+        }
     }
 
 }

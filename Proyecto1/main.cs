@@ -50,6 +50,7 @@ namespace Proyecto1_EDD2
                         ActualizarJugador();
                         break;
                     case "4":
+                        EliminarJugador();
                         break;
                     case "5":
                         GenerarTop5();
@@ -188,6 +189,36 @@ namespace Proyecto1_EDD2
             }
         }
 
+        static void EliminarJugador()
+        {
+            Console.WriteLine("\n--- ELIMINAR JUGADOR ---");
+            Console.Write("Ingrese el nombre del jugador que desea eliminar: ");
+            string nombre = Console.ReadLine().Trim();
+
+            Console.Write($"¿Está totalmente seguro de eliminar a {nombre.ToUpper()}? (S/N): ");
+            string confirmacion = Console.ReadLine().Trim().ToUpper();
+
+            if (confirmacion == "S")
+            {
+                // Usa el metodo de eliminar del arbol
+                bool exito = arbol.Eliminar(nombre);
+
+                if (exito)
+                {
+                    // Sobrescribe el archivo para que el borrado sea permanente
+                    GuardarCambiosCSV();
+                    Console.WriteLine($"\nEl jugador {nombre} ha sido eliminado.");
+                }
+                else
+                {
+                    Console.WriteLine($"\nError: No se encontró al jugador {nombre}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("\nOperación cancelada.");
+            }
+        }
 
 
         static void GenerarTop5()
@@ -216,9 +247,9 @@ namespace Proyecto1_EDD2
                     break;
             }
 
-            Console.WriteLine("\n¿Desea obtener los 5 MÁS ALTOS o los 5 MÁS BAJOS?");
-            Console.WriteLine("1. Los 5 más altos (MaxHeap)");
-            Console.WriteLine("2. Los 5 más bajos (MinHeap)");
+            Console.WriteLine("\n¿Desea obtener los 5 más altos o los 5 más bajos?");
+            Console.WriteLine("1. Los 5 más altos");
+            Console.WriteLine("2. Los 5 más bajos");
             Console.Write("Opción: ");
             string tipoHeap = Console.ReadLine();
 
@@ -235,7 +266,7 @@ namespace Proyecto1_EDD2
             NodoBPlus actual = arbol.ObtenerPrimeraHoja();
             if (actual == null)
             {
-                Console.WriteLine("\nLa base de datos está vacía.");
+                Console.WriteLine("\nNo hay jugadores registrados.");
                 return;
             }
 
